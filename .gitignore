@@ -1,6 +1,3 @@
-# Ignore database files
-*.sqlite3
-
 # Ignore staticfiles directory
 staticfiles/
 
@@ -23,5 +20,4 @@ __pycache__/
 *.log
 *.tmp
 
-# Ignore Django migration files
-*/migrations/
+notification/
