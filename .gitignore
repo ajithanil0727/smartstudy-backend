@@ -20,4 +20,5 @@ __pycache__/
 *.log
 *.tmp
 
-notification/
+# Ignore Django migration files
+*/migrations/
