@@ -1,0 +1,27 @@
+# Ignore database files
+*.sqlite3
+
+# Ignore staticfiles directory
+staticfiles/
+
+# Ignore media files
+media/
+
+# Ignore environment-specific files
+.env
+
+# Ignore system-specific files
+*.pyc
+__pycache__/
+
+
+# Ignore IDE and editor-specific files
+.vscode/
+.idea/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore Django migration files
+*/migrations/
