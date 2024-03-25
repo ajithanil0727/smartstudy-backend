@@ -3,8 +3,6 @@ from django.db import models
 from SmartUsers.models import CustomUser 
 
 
-
-
 class ChatRoom(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)

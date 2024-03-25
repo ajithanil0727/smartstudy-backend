@@ -5,15 +5,15 @@ from SmartUsers.serializers import CustomUserSerializer
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()  # Serialize user as a string
-    timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")  # Customize timestamp format
+    user = serializers.StringRelatedField()
+    timestamp = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Chat
         fields = ['content', 'timestamp', 'user']
 
     def validate_content(self, value):
-        if not value.strip():  # Check if content is empty or only whitespace
+        if not value.strip():
             raise serializers.ValidationError("Content cannot be empty.")
         return value
 

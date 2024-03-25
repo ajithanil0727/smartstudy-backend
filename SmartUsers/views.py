@@ -3,7 +3,7 @@ import hashlib
 import json
 import jwt
 import uuid
-from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from rest_framework.exceptions import NotFound
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -15,22 +15,19 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework import generics
 from .serializers import *
-
-
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import *
-
-def serverStart(request):
-    return HttpResponse('<h1>server started</h1>')
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import CustomUserSerializer
 import jwt
+
+def serverStart(request):
+    return HttpResponse('<h1>server started</h1>')
 
 class FetchUserData(APIView):
     def post(self, request):

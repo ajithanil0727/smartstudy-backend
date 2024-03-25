@@ -1,9 +1,7 @@
-# Ignore staticfiles directory
-staticfiles/
-
-# Ignore media files
+# Ignore files
 media/
-
+db.sqlite3
+notification/
 # Ignore environment-specific files
 .env
 
