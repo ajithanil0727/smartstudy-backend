@@ -6,9 +6,8 @@ from Chat.channelMiddleware import JWTwebsocketMiddleware
 from Chat.routes import websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SmartStudy.settings')
-django.setup()
-application = get_asgi_application()
+django.setup() 
 application = ProtocolTypeRouter({
-    'http':application,
+    'http':get_asgi_application(),
     'websocket':JWTwebsocketMiddleware(URLRouter(websocket_urlpatterns))
 })

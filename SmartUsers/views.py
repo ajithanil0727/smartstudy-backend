@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 from rest_framework import generics
 from .serializers import *
 from rest_framework import status
@@ -92,32 +92,33 @@ class UserLoginView(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         password = request.data.get('password')
-        print(email, password)
-        user = authenticate(request, email=email, password=password)
-            
-        if user is not None:
-            if user.is_active:
-                refresh = RefreshToken.for_user(user)
-                user_serializer = CustomUserSerializer(user)
-                user_data = user_serializer.data
-                if user.is_staff:
-                    message = 'admin'
-                elif user.is_student:
-                    message = 'student'
-                elif user.is_tutor:
-                    message = 'tutor'
+        try:
+            user = CustomUser.objects.get(email=email)
+            if check_password(password, user.password):
+                if user.is_active:
+                    refresh = RefreshToken.for_user(user)
+                    user_serializer = CustomUserSerializer(user)
+                    user_data = user_serializer.data
+                    if user.is_staff:
+                        message = 'admin'
+                    elif user.is_student:
+                        message = 'student'
+                    elif user.is_tutor:
+                        message = 'tutor'
 
-                data = {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                    'user': user_data,
-                    'message': message
-                }
-                return Response(data, status=status.HTTP_200_OK)
-            else:
-                return Response({'message': 'User is blocked'}, status=status.HTTP_401_UNAUTHORIZED)
-        else:   
-            return Response({'message': 'Invalid Credential'}, status=status.HTTP_401_UNAUTHORIZED)
+                    data = {
+                        'refresh': str(refresh),
+                        'access': str(refresh.access_token),
+                        'user': user_data,
+                        'message': message
+                    }
+                    return Response(data, status=status.HTTP_200_OK)
+                else:
+                    return Response({'message': 'User is blocked'}, status=status.HTTP_403_FORBIDDEN)
+            else:   
+                return Response({'message': 'Invalid Credential'}, status=status.HTTP_401_UNAUTHORIZED)
+        except CustomUser.DoesNotExist:
+            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
 
 class CreateCategoryView(APIView):
@@ -340,10 +341,10 @@ def generate_phonepe_payload():
         "merchantId": "PGTESTPAYUAT",
         "merchantTransactionId": transaction,  
         "merchantUserId": "MUID-" + str(uuid.uuid4())[-6:],
-        "amount": 10000,  
-        "redirectUrl": "http://127.0.0.1:8000/paymentstatus/",
+        "amount": 100000,  
+        "redirectUrl": "https://oddityfinds.shop/paymentstatus/",
         "redirectMode": "POST",
-        "callbackUrl": "http://127.0.0.1:8000/paymentstatus/",
+        "callbackUrl": "https://oddityfinds.shop/paymentstatus/",
         "mobileNumber": "9999999999",
         "paymentInstrument": {
             "type": "PAY_PAGE"
@@ -419,9 +420,9 @@ def handle_phonepe_response(request):
         status = request.POST.get('code')
         print(request.POST)
         if status == 'PAYMENT_SUCCESS':
-            return redirect('http://localhost:5173/paymentstatus?message=success')
+            return redirect('https://smartstudy-frontend.vercel.app/paymentstatus?message=success')
         else:
-            return redirect('http://localhost:5173/paymentstatus?message=failed')
+            return redirect('https://smartstudy-frontend.vercel.app/paymentstatus?message=failed')
     else:
         return HttpResponse('Method not allowed', status=405)
     
